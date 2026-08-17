@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:18.4-alpine
+    environment:
+      POSTGRES_DB: burgoweb_dev
+      POSTGRES_USER: burgoweb
+      POSTGRES_PASSWORD: ${BURGOWEB_DEV_DB_PASSWORD:?development database password is required}
+    ports:
+      - "127.0.0.1:55432:5432"
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U burgoweb -d burgoweb_dev"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    restart: "no"
+  mailpit:
+    image: axllent/mailpit:v1.30.6
+    ports:
+      - "127.0.0.1:8025:8025"
+    restart: "no"

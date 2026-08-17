@@ -1,0 +1,1 @@
+import { createFileRoute } from '@tanstack/react-router';import { AccountSessionsPage } from '../components/AccountSessionsPage';export const Route=createFileRoute('/conta-sessoes')({head:()=>({meta:[{title:'Conta e sessões — Burgoweb'}]}),component:AccountSessionsPage});

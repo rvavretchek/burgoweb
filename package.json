@@ -1,38 +1,58 @@
 {
   "name": "burgoweb",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "scripts": {
-    "dev": "concurrently -n web,api -c blue,green \"npm run dev:web\" \"npm run dev:api\"",
-    "dev:web": "vite --host 0.0.0.0 --port 5173",
-    "dev:api": "tsx src/server/index.ts",
-    "build": "npm run build:web && npm run build:api",
-    "build:web": "vite build",
-    "build:api": "tsc -p tsconfig.server.json",
-    "test": "vitest run"
+  "engines": {
+    "node": "24.18.0"
   },
-  "dependencies": {
-    "argon2": "^0.31.2",
-    "cors": "^2.8.0",
-    "express": "^4.19.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.21.0",
-    "zod": "^3.15.0"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "npm run dev --workspace @burgoweb/web",
+    "dev:api": "npm run dev --workspace @burgoweb/api",
+    "dev:worker": "npm run dev --workspace @burgoweb/worker",
+    "build": "npm run check:api-contract && npm run check:boundaries && npm run build --workspaces --if-present",
+    "test": "vitest run",
+    "test:integration": "node scripts/run-postgres-integration.mjs",
+    "test:integration:local": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-postgres-integration.ps1",
+    "test:integration:raw": "vitest run --maxWorkers=1 tests/postgres-integration.test.ts tests/postgres-roles-integration.test.ts tests/postgres-capabilities-integration.test.ts tests/postgres-financial-responsibles-integration.test.ts",
+    "test:e2e": "npm run build && node scripts/run-e2e.mjs",
+    "check:types": "tsc --noEmit -p tsconfig.json",
+    "generate:api-client": "node scripts/generate-api-client.mjs",
+    "check:api-contract": "node scripts/generate-api-client.mjs --check",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "smoke": "npm test && npm run test:e2e"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.5",
-    "@types/express": "^5.0.1",
-    "@types/node": "^22.10.1",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.1",
-    "concurrently": "^9.0.1",
-    "jsdom": "^25.0.1",
-    "tsx": "^4.19.0",
-    "typescript": "^5.6.3",
-    "vite": "^5.4.10",
-    "vitest": "^2.1.9"
+    "@babel/preset-typescript": "7.28.5",
+    "@tanstack/start-plugin-core": "1.171.22",
+    "@types/node": "24.13.3",
+    "@types/pg": "^8.15.5",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "axe-core": "4.11.0",
+    "cypress": "15.19.0",
+    "jsdom": "26.1.0",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-win32-x64-msvc": "1.1.5"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.1.20",
+    "@nestjs/core": "11.1.20",
+    "@nestjs/platform-fastify": "11.1.20",
+    "argon2": "0.44.0",
+    "fastify": "5.10.0",
+    "kysely": "0.29.2",
+    "pg": "8.16.3",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "testcontainers": "12.0.4"
   }
 }

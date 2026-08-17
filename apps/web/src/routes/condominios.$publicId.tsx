@@ -1,0 +1,1 @@
+import { createFileRoute } from '@tanstack/react-router'; import { DashboardPage } from '../components/AuthenticatedPages'; export const Route=createFileRoute('/condominios/$publicId')({component:Page}); function Page(){const{publicId}=Route.useParams();return <DashboardPage key={publicId} publicId={publicId}/>;}

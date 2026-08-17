@@ -1,0 +1,17 @@
+{
+  "tdd_phase": "RED",
+  "total_tests": 25,
+  "api_tests": 16,
+  "e2e_tests": 9,
+  "priority_coverage": { "P0": 18, "P1": 7, "P2": 0, "P3": 0 },
+  "all_tests_skipped": true,
+  "expected_to_fail": true,
+  "generated_test_files": [
+    "tests/api-roles.test.ts",
+    "cypress/e2e/role-lifecycle.cy.js"
+  ],
+  "fixture_files": ["tests/fixtures/role-atdd-data.ts"],
+  "acceptance_criteria_covered": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+  "execution": "AGENT-TEAM (API + E2E)",
+  "python": "Python 3.14.0"
+}

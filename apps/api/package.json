@@ -1,0 +1,27 @@
+{
+  "name": "@burgoweb/api",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@burgoweb/adapters": "0.1.0",
+    "@burgoweb/application": "0.1.0",
+    "@burgoweb/config": "0.1.0",
+    "@nestjs/common": "11.1.20",
+    "@nestjs/core": "11.1.20",
+    "@nestjs/platform-fastify": "11.1.20",
+    "fastify": "5.10.0",
+    "pg": "8.16.3",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12",
+    "tsx": "4.20.6"
+  }
+}

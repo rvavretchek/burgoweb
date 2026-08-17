@@ -1,0 +1,1 @@
+import { createFileRoute } from '@tanstack/react-router'; import { LoginPage } from '../components/AuthenticatedPages'; export const Route=createFileRoute('/entrar')({head:()=>({meta:[{title:'Entrar — Burgoweb'}]}),component:LoginPage});

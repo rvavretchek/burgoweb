@@ -1,0 +1,1 @@
+import { createFileRoute } from '@tanstack/react-router';import { RequestAccessRecoveryPage } from '../components/AccessRecoveryPages';export const Route=createFileRoute('/recuperar-acesso')({head:()=>({meta:[{title:'Recuperar acesso — Burgoweb'}]}),component:RequestAccessRecoveryPage});

@@ -1,0 +1,2 @@
+ALTER TABLE burgoweb_global.account_tenant_memberships ADD COLUMN IF NOT EXISTS source_relationship_id uuid;
+CREATE INDEX IF NOT EXISTS account_tenant_memberships_source_relationship_idx ON burgoweb_global.account_tenant_memberships(tenant_id,source_relationship_id) WHERE source_relationship_id IS NOT NULL;
