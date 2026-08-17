@@ -199,7 +199,7 @@ NFR-20: Nenhuma meta operacional pode ser apresentada como compromisso público 
 - Antes do lançamento devem existir evidências para os gates jurídico/LGPD, segurança, privacidade, portabilidade, qualidade/capacidade, resposta a incidentes e operação; esses gates não bloqueiam a decomposição ou a implementação segura dos demais incrementos.
 - O parecer jurídico consolidado sobre LGPD, cobrança, saída de ocupante, responsabilidade e retenção foi solicitado e está pendente; histórias dependentes devem permanecer marcadas pelo gate e não podem inventar responsáveis, bases legais, prazos ou critérios de corresponsabilidade.
 - Como baseline conservador provisório, a saída encerra o Vínculo ativo de Morador mesmo com pendência, preserva o histórico Pessoa–Unidade e a Obrigação por competência, não transfere dívida ao novo ocupante e não mantém acesso amplo; eventual relação ou acesso pós-saída é separado, mínimo, auditado e condicionado ao parecer.
-- Cada história deve rastrear FRs/NFRs aplicáveis e incluir cenários positivos, validação, autorização, isolamento, falha e auditoria, evitando épico técnico tardio de “qualidade”.
+- Cada história deve rastrear FRs/NFRs aplicáveis até critérios de aceitação identificáveis e incluir cenários positivos, validação, autorização, isolamento, falha e auditoria. Intervalos amplos de requisitos não comprovam cobertura por si sós; `create-story` deve produzir uma matriz requisito → critério/evidência antes da implementação.
 
 ### Requisitos de UX Design
 
@@ -348,14 +348,14 @@ Pessoas autorizadas geram Exportações Institucionais e Financeiras completas, 
 - Privacidade e segurança são aplicadas desde o primeiro dado; o Épico 6 entrega os fluxos humanos e excepcionais completos.
 - Projeções exportáveis versionadas são construídas com cada domínio; o Épico 7 compõe e valida o pacote ponta a ponta.
 - Bootstrap greenfield é incremental e ligado ao primeiro fluxo demonstrável, sem épico técnico separado.
-- Requisitos UX reconciliados neste documento prevalecem sobre fluxos obsoletos de `ux.md`, conforme a precedência documental do projeto.
+- Divergências identificadas entre este backlog e `ux.md` não alteram a precedência documental do projeto: devem ser reconciliadas no artefato canônico de UX ou registradas como decisão explícita do proprietário antes da implementação.
 - Natureza do conteúdo, audiência efetiva e estado editorial são dimensões separadas; não existe um booleano genérico de público/privado capaz de substituir essas regras.
 - “Público” significa coletivo dentro da audiência autorizada do Condomínio, não exposição irrestrita na internet.
 - Publicação coletiva obrigatória alcança todos os Moradores ativos sem exclusão individual silenciosa; conteúdo privado obrigatório nunca recebe audiência coletiva.
 - Comunicado geral é necessariamente coletivo para a audiência geral definida; Comunicado privado usa audiência restrita autorizada; Comunicado de cobrança alcança somente Responsáveis Financeiros vigentes das Unidades abrangidas.
 - Criar derivado saneado no Épico 3 não concede acesso, cria URL pública, vincula audiência ou publica. A versão compartilhável de FR-35 somente existe no Épico 4, associada explicitamente à audiência e à Versão Publicada.
 - Nenhuma história depende de história futura, satisfaz autorização somente na interface, aceita fluxo sensível apenas pelo happy path ou converte requisito deferido em decisão silenciosa.
-- Cada história deve ser uma fatia vertical demonstrável, possuir rastreabilidade e cenários negativos específicos e caber no contexto de execução de um agente.
+- Cada história deve ser uma fatia vertical demonstrável, possuir rastreabilidade e cenários negativos específicos e caber no contexto de execução de um agente. Antes de `create-story`, histórias que combinem mais de um fluxo de usuário ou múltiplas capacidades operacionais independentes devem ser divididas; infraestrutura, autorização, auditoria e testes permanecem critérios transversais da fatia, não fluxos adicionais usados para justificar histórias excessivas.
 - Nenhum épico termina sem resultado demonstrável ao stakeholder principal.
 - O gate de prontidão deve ser repetido antes de liberar a implementação orientada pelo backlog.
 
@@ -425,6 +425,11 @@ Para que eu possa estabelecer a base institucional sem depender de atendimento c
 **Quando** informa os dados mínimos válidos da Pessoa, da Conta e do Condomínio, define sua credencial e aceita a declaração de autoridade inicial
 **Então** o sistema registra uma solicitação de provisionamento em estado pendente
 **E** apresenta claramente que o controle do e-mail ainda deverá ser verificado antes da ativação.
+
+**Dado** que uma solicitação de provisionamento permanece pendente além do prazo operacional configurado
+**Quando** o reconciliador processa solicitações expiradas
+**Então** ela assume estado terminal explícito e recursos reservados são compensados de forma idempotente
+**E** uma nova tentativa segura pode ser iniciada sem reutilizar token, tenant parcial ou autoridade anterior.
 
 **Dado** que a declaração de autoridade inicial é apresentada
 **Quando** o responsável confirma sua autodeclaração
@@ -505,6 +510,11 @@ Para que somente quem controla o canal informado possa concluir o onboarding.
 **Quando** o worker processa a outbox
 **Então** aplica tentativas limitadas, backoff, lease e idempotência sem enviar mensagens duplicadas silenciosamente
 **E** utiliza a contingência configurada somente conforme a política operacional, registrando resultado e correlação sem expor o token.
+
+**Dado** que o provedor retorna falha permanente ou todas as tentativas e contingências permitidas se esgotam
+**Quando** o item de outbox não pode mais ser entregue automaticamente
+**Então** registra estado terminal de entrega com motivo sanitizado e oferece reemissão por caminho de recuperação autorizado
+**E** não mantém a verificação como enviada, não ativa o Condomínio e não reutiliza o token comprometido ou expirado.
 
 **Dado** que o responsável acessa um token válido e não utilizado
 **Quando** confirma a verificação
@@ -774,7 +784,13 @@ Para que elas possam associar ou criar sua Conta e acessar somente o Papel autor
 **Dado** que a Pessoa já possui Conta associável ao mesmo e-mail verificado
 **Quando** autentica-se e aceita o Convite válido
 **Então** o sistema associa a Conta existente à Pessoa e ativa o Papel e Vínculo previstos
-**E** não cria identidade, credencial ou Conta duplicada.
+**E** não cria identidade, credencial ou Conta duplicada
+**E** na mesma transação registra o Vínculo selecionado como proveniência explícita da atribuição de Papel e da membership derivadas, usando o caminho `linkAuthorizationSource` preparado na Story 1.6, para que o encerramento desse Vínculo retire somente o acesso dele dependente.
+
+**Dado** que a autoridade inicial do Síndico ou outra projeção de acesso é independente de Vínculo Pessoa–Unidade
+**Quando** um Convite é aceito ou um Vínculo é criado/encerrado
+**Então** o sistema não infere nem grava essa projeção independente como derivada
+**E** criar Pessoa, Unidade ou Vínculo isoladamente continua sem conceder Papel, membership ou acesso.
 
 **Dado** que uma Conta autenticada não controla o e-mail destinatário ou pertence a outra Pessoa incompatível
 **Quando** tenta aceitar o Convite
@@ -840,6 +856,11 @@ Para que cada Pessoa mantenha somente a autoridade institucional necessária ao 
 **Quando** o instante inicial ainda não chegou
 **Então** o Papel permanece programado e não autoriza operações
 **E** sua ativação temporal ocorre de forma idempotente, auditável e baseada no fuso configurado do Condomínio.
+
+**Dado** que o horário local escolhido é ambíguo ou inexistente no fuso do Condomínio
+**Quando** a vigência é validada
+**Então** o sistema exige um instante inequívoco com offset explícito ou uma nova escolha válida
+**E** não agenda nem ativa o Papel por conversão silenciosa.
 
 **Dado** que a vigência de um Papel termina
 **Quando** o prazo final é alcançado
@@ -2297,7 +2318,7 @@ Para que o Condomínio reduza exposição e consumo sem destruir evidências que
 **Dado** que os prazos e bases exatos de retenção ainda dependem do parecer jurídico consolidado
 **Quando** não existe política aprovada aplicável ao Anexo
 **Então** o sistema adota preservação conservadora do binário e permite restringir seu acesso quando cabível
-**E** não presume prazo, base legal ou autorização de eliminação.
+**E** não presume prazo, base legal ou autorização de eliminação, registra revisão periódica obrigatória e reaplica retroativamente a política quando ela for aprovada.
 
 **Dado** que o Anexo está em quarentena, rejeitado ou privado e não possui impedimento de retenção
 **Quando** a remoção é confirmada conforme política aprovada
@@ -2307,7 +2328,7 @@ Para que o Condomínio reduza exposição e consumo sem destruir evidências que
 **Dado** que o Anexo ou derivado está referenciado por snapshot imutável ou Publicação
 **Quando** alguém solicita remoção simples
 **Então** o sistema impede que a operação quebre a integridade histórica
-**E** orienta o fluxo de suspensão editorial do Épico 4 quando houver risco de exposição publicada.
+**E** restringe imediatamente o acesso permitido pelo estado atual e registra uma ação editorial pendente, sem depender da implementação futura do fluxo completo de suspensão do Épico 4.
 
 **Dado** que o expurgo físico é permitido e concluído
 **Quando** o ciclo de remoção termina
@@ -3986,7 +4007,47 @@ Para que detecção, contenção, correção e recuperação sejam coordenadas s
 **Então** cumprem WCAG 2.2 AA
 **E** criticidade e andamento não dependem apenas de cor.
 
-Rastreabilidade: FR-21 parcialmente quanto às ações corretivas, FR-22, FR-23 parcialmente, FR-28 parcialmente, FR-30–FR-33 parcialmente, FR-45 parcialmente, NFR-1, NFR-3–NFR-12, NFR-14, NFR-15, UX-DR1, UX-DR5, UX-DR6, UX-DR13–UX-DR20, AD-4–AD-11, AD-13–AD-26 e gates jurídico, LGPD, segurança, backup/restauração e resposta a incidentes.
+Rastreabilidade: FR-21 parcialmente quanto às ações corretivas (AC de ação corretiva futura); FR-22 e FR-23 parcialmente (ACs de estados, histórico e persistência); FR-28 parcialmente (AC de publicação/exportação indevida); FR-30–FR-33 parcialmente (ACs de incidente com solicitações, disputa e Conta comprometida); FR-45 parcialmente (ACs de evidência e auditoria); NFR-1 e NFR-3–NFR-12 (ACs de isolamento, contenção, evidência, comunicação e acessibilidade); NFR-14 (ACs de concorrência e persistência); UX-DR1, UX-DR5, UX-DR6 e UX-DR13–UX-DR20 (ACs de linguagem, estados, confirmação e acessibilidade); AD-4–AD-11 e AD-13–AD-26 somente onde associados aos ACs citados; gates jurídico, LGPD, segurança, backup/restauração e resposta a incidentes. NFR-15 e NFR-16 são demonstrados separadamente pela Story 6.7.
+
+### Story 6.7: Validar backup, restauração e capacidade para o lançamento
+
+Como responsável autorizado pela operação,
+Quero executar e registrar exercícios de recuperação e medições de capacidade,
+Para que o lançamento dependa de evidências objetivas de continuidade e desempenho.
+
+**Critérios de Aceitação:**
+
+**Dado** que ambientes e dados representativos estão disponíveis
+**Quando** a política operacional de continuidade é aprovada
+**Então** define RPO, RTO, frequência, retenção, criptografia, isolamento e responsáveis por backup e restauração
+**E** nenhuma meta é declarada atendida sem evidência reproduzível.
+
+**Dado** que um backup global ou tenant é produzido
+**Quando** sua integridade é verificada
+**Então** o artefato possui inventário, hash, criptografia, controle de acesso e resultado auditável
+**E** segredos e dados entre Condomínios não são expostos por logs, nomes ou permissões compartilhadas.
+
+**Dado** que o exercício periódico de restauração é iniciado
+**Quando** dados globais e de tenant são recuperados em ambiente isolado
+**Então** o procedimento mede RPO e RTO efetivos e valida migrations, integridade, autorização e isolamento
+**E** falha ou divergência bloqueia o gate de lançamento até correção e nova execução.
+
+**Dado** que disponibilidade, latência e capacidade precisam de metas quantitativas
+**Quando** o baseline é medido com carga e inventário representativos
+**Então** picos, percentis, taxa de erro, filas, banco, storage e recuperação recebem limites aprovados
+**E** cenário, volume, duração, versão e resultado permanecem registrados para comparação.
+
+**Dado** que benchmark ou soak test excede um limite aprovado
+**Quando** o resultado é avaliado
+**Então** o gate permanece bloqueado e registra responsável, correção e critério de repetição
+**E** médias agregadas não ocultam percentis, saturação, erros ou degradação por tenant.
+
+**Dado** que os exercícios e medições são repetidos
+**Quando** a stack, schema, volume ou política muda materialmente
+**Então** a evidência anterior é preservada e uma nova versão é vinculada ao gate
+**E** aprovação histórica não é reutilizada silenciosamente para configuração diferente.
+
+Rastreabilidade: NFR-15 (ACs de política, backup e restauração), NFR-16 (ACs de baseline, limites e gate quantitativo), NFR-17 e NFR-18 (ACs de operação e repetibilidade), AD-18, AD-22, AD-24 e gates de backup/restauração, capacidade e lançamento.
 
 ## Épico 7: Garantir portabilidade e continuidade institucional
 
@@ -4004,6 +4065,11 @@ Para que eu possa entregá-los a um operador externo em formato aberto e verific
 **Quando** inicia uma solicitação
 **Então** pode selecionar período, Contas Financeiras, categorias, Lançamentos, Movimentos, serviços, Obrigações, Fechamentos e demais componentes permitidos
 **E** o escopo fica limitado ao Condomínio autorizado.
+
+**Dado** que o período final antecede o inicial ou nenhum componente permitido foi selecionado
+**Quando** o ator tenta revisar ou confirmar a solicitação
+**Então** o sistema rejeita o escopo com validação acionável
+**E** não cria snapshot, job, arquivo ou Evento de Auditoria de sucesso.
 
 **Dado** que o ator seleciona um período aberto, conferido ou fechado
 **Quando** revisa o escopo

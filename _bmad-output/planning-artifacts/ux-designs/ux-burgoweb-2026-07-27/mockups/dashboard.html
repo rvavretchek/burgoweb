@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Visão geral — Residencial Ipê Amarelo — Burgoweb</title>
+  <style>
+    /* Governado por DESIGN.md: Brand & Style, Colors, Typography, Layout & Spacing,
+       Components (Shell institucional, Content card, Money summary, Pending item, Focus ring).
+       EXPERIENCE.md: Foundation, IA/Visão geral, Component Patterns, State Patterns/Dashboard, UJ-1 passo 7. */
+    :root{--primary:#236F9E;--primary-hover:#19597F;--canvas:#F7F9FB;--surface:#FFF;--subtle:#EEF3F6;--ink:#17212B;--muted:#536270;--border:#C8D2DA;--focus:#6D28D9;--success:#176B45;--success-bg:#E7F5ED;--info:#175CD3;--info-bg:#EAF2FF;--r-sm:4px;--r-md:8px;--r-lg:12px}
+    *{box-sizing:border-box} body{margin:0;background:var(--canvas);color:var(--ink);font:16px/1.5 Inter,ui-sans-serif,system-ui,sans-serif} a{color:var(--primary);text-decoration:underline;text-underline-offset:3px} a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:2px} button,select{font:inherit;min-height:44px;border-radius:var(--r-md)} button{cursor:pointer}.shell{min-height:100vh;display:grid;grid-template-columns:248px 1fr}.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px 16px}.brand{display:flex;gap:10px;align-items:center;font-weight:750;font-size:20px;margin-bottom:28px}.mark{width:34px;height:34px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center}.context{border:1px solid var(--border);border-radius:var(--r-md);padding:12px;margin-bottom:24px}.context label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}.context select{width:100%;border:1px solid var(--border);background:#fff;padding:8px}.nav{list-style:none;padding:0;margin:0;display:grid;gap:4px}.nav a{display:block;padding:10px 12px;border-radius:8px;color:var(--ink);text-decoration:none}.nav a[aria-current="page"]{background:var(--info-bg);color:#123F75;font-weight:700;border-left:4px solid var(--primary)}.account{margin-top:32px;border-top:1px solid var(--border);padding-top:16px;font-size:14px}.main{min-width:0}.topbar{height:72px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;padding:0 32px;gap:16px}.role{font-size:14px;color:var(--muted)}main{max-width:1180px;margin:auto;padding:32px}.eyebrow{font-size:14px;color:var(--muted);margin:0 0 4px}h1{font-size:32px;line-height:1.2;margin:0}h2{font-size:24px;line-height:1.3;margin:0}.intro{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin-bottom:24px}.primary{border:0;background:var(--primary);color:#fff;font-weight:650;padding:10px 18px}.primary:hover{background:var(--primary-hover)}.notice{background:var(--info-bg);border:1px solid var(--info);border-radius:var(--r-md);padding:12px 16px;margin-bottom:24px}.grid{display:grid;grid-template-columns:1.35fr .85fr;gap:24px}.stack{display:grid;gap:24px}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}.card-head{display:flex;justify-content:space-between;align-items:start;gap:16px;margin-bottom:18px}.card-head p{margin:4px 0 0;color:var(--muted)}.steps{list-style:none;padding:0;margin:0;display:grid;gap:12px}.step{border:1px solid var(--border);border-radius:var(--r-md);padding:16px;display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:start}.num{width:32px;height:32px;border-radius:50%;background:var(--subtle);display:grid;place-items:center;font-weight:700}.step strong,.step span{display:block}.step span{color:var(--muted);font-size:14px;margin-top:2px}.secondary{border:1px solid var(--primary);background:#fff;color:var(--primary);font-weight:650;padding:8px 12px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{background:var(--subtle);border-radius:var(--r-md);padding:16px}.metric span{display:block;color:var(--muted);font-size:13px}.metric strong{display:block;font-size:22px;margin-top:4px;font-variant-numeric:tabular-nums}.invite{display:flex;gap:12px;align-items:flex-start;border-top:1px solid var(--border);padding-top:16px}.avatar{width:40px;height:40px;border-radius:50%;background:var(--subtle);display:grid;place-items:center;font-weight:700}.invite p{margin:0}.badge{display:inline-block;border-radius:9999px;background:#FFF4CC;color:#604600;font-size:13px;font-weight:650;padding:3px 9px;margin-top:6px}.meta{font-size:13px;color:var(--muted)}.activity{list-style:none;padding:0;margin:0;display:grid;gap:16px}.activity li{border-left:3px solid var(--border);padding-left:12px}.activity p{margin:0}.menu{display:none}
+    @media(max-width:1023px){.shell{display:block}.sidebar{display:none}.topbar{justify-content:space-between;padding:0 16px}.menu{display:inline-block;border:1px solid var(--border);background:#fff;padding:8px 12px}.grid{grid-template-columns:1fr}main{padding:24px 16px}.intro{align-items:stretch}.summary{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.intro{display:grid}.intro .primary{width:100%}.summary{grid-template-columns:1fr}.step{grid-template-columns:32px 1fr}.step .secondary{grid-column:2;justify-self:start}.card{padding:16px}h1{font-size:28px}.role{display:none}}
+    @media(forced-colors:active){*:focus-visible{outline:3px solid Highlight}.nav a[aria-current="page"]{border-left-color:Highlight}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <div class="brand"><span class="mark" aria-hidden="true">B</span>Burgoweb</div>
+      <div class="context"><label for="condo">Condomínio ativo</label><select id="condo"><option>Residencial Ipê Amarelo</option></select></div>
+      <nav aria-label="Seções"><ul class="nav"><li><a href="#" aria-current="page">Visão geral</a></li><li><a href="#">Finanças</a></li><li><a href="#">Transparência</a></li><li><a href="#">Trabalho</a></li><li><a href="#">Histórico</a></li><li><a href="#">Configurações</a></li></ul></nav>
+      <div class="account"><strong>Márcia Oliveira</strong><br><span class="role">Síndica · capacidades vigentes</span><br><a href="#">Conta e sessões</a></div>
+    </aside>
+    <div class="main">
+      <header class="topbar"><button class="menu" type="button">☰ Menu</button><span class="role">Residencial Ipê Amarelo · Síndica</span><a href="#">Ajuda</a></header>
+      <main id="conteudo">
+        <div class="intro"><div><p class="eyebrow">Residencial Ipê Amarelo</p><h1>Olá, Márcia</h1><p>Veja o que já está organizado e escolha o próximo passo.</p></div><button class="primary" type="button">Registrar despesa</button></div>
+        <div class="notice" role="status"><strong>Condomínio criado com sucesso.</strong> O contexto ativo é Residencial Ipê Amarelo.</div>
+        <div class="grid">
+          <div class="stack">
+            <section class="card" aria-labelledby="passos"><div class="card-head"><div><h2 id="passos">Próximos passos</h2><p>Você pode seguir na ordem que fizer sentido para a gestão.</p></div></div><ol class="steps">
+              <li class="step"><span class="num">1</span><div><strong>Registrar a situação financeira</strong><span>Crie uma conta financeira e registre valores previstos ou realizados.</span></div><button class="secondary" type="button">Começar</button></li>
+              <li class="step"><span class="num">2</span><div><strong>Cadastrar unidades e pessoas</strong><span>Organize os vínculos sem confundir identidade com autorização.</span></div><button class="secondary" type="button">Cadastrar</button></li>
+              <li class="step"><span class="num">3</span><div><strong>Convidar sua equipe</strong><span>Defina o papel, as capacidades e a vigência antes de enviar.</span></div><button class="secondary" type="button">Convidar</button></li>
+            </ol></section>
+            <section class="card" aria-labelledby="financas"><div class="card-head"><div><h2 id="financas">Resumo financeiro autorizado</h2><p>Julho de 2026 · valores registrados até 27 de julho</p></div><a href="#">Ver finanças</a></div><div class="summary"><div class="metric"><span>Previsto</span><strong>R$ 8.450,00</strong></div><div class="metric"><span>Realizado</span><strong>R$ 3.180,00</strong></div><div class="metric"><span>Saldo registrado</span><strong>R$ 5.270,00</strong></div></div></section>
+          </div>
+          <div class="stack">
+            <section class="card" aria-labelledby="convites"><div class="card-head"><div><h2 id="convites">Pessoas e acesso</h2><p>Convites que precisam de acompanhamento.</p></div><a href="#">Ver todos</a></div><div class="invite"><span class="avatar" aria-hidden="true">AS</span><div><p><strong>Ana Souza</strong></p><p class="meta">Conselheira · convite enviado em 27/07/2026</p><span class="badge">◷ Convite pendente</span></div></div></section>
+            <section class="card" aria-labelledby="atividade"><div class="card-head"><div><h2 id="atividade">Atividade recente</h2><p>Somente eventos que você pode consultar.</p></div></div><ul class="activity"><li><p><strong>Condomínio provisionado</strong></p><span class="meta">Hoje, 09:42 · Márcia Oliveira</span></li><li><p><strong>Convite de Conselheira enviado</strong></p><span class="meta">Hoje, 10:18 · Ana Souza</span></li></ul></section>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -89,11 +89,13 @@ O texto foi encaminhado ao advogado junto do material de LGPD, com solicitação
 
 ## Resultado
 
-O backlog seguirá para criação de histórias com 45 FRs cobertos, gates jurídicos explícitos e estas invariantes:
+O backlog foi decomposto em épicos e histórias com 45 FRs cobertos, gates jurídicos explícitos e estas invariantes:
 
 - nenhuma história depende de história futura;
 - nenhuma autorização é satisfeita somente pela interface;
 - nenhum fluxo sensível é aceito apenas pelo happy path;
 - nenhum requisito deferido vira decisão silenciosa;
 - auditoria, privacidade, segurança e exportabilidade são construídas desde o primeiro incremento relevante;
-- implementação somente será liberada depois de nova execução do gate de prontidão.
+- a implementação permanece condicionada à execução e aprovação do gate de prontidão mais recente.
+
+Este registro é memória histórica de apoio ao planejamento; não substitui as fontes canônicas nem altera sua precedência.
